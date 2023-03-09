@@ -3,12 +3,22 @@ package org.example.controller;
 import org.example.container.ComponentContainer;
 import org.example.dto.Profile;
 import org.example.service.CardService;
+import org.example.service.TransactionService;
 import org.example.util.ScannerUtil;
 
 import java.util.Scanner;
 
 public class ProfileController {
-    private CardService cardService = new CardService();
+    private CardService cardService;
+    private TransactionService transactionService;
+
+    public void setCardService(CardService cardService) {
+        this.cardService = cardService;
+    }
+
+    public void setTransactionService(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
     public void start() {
         boolean b = true;
@@ -33,7 +43,7 @@ public class ProfileController {
                     refill();
                     break;
                 case 6:
-                    transactionList();
+//                    transactionList();
                     break;
                 case 7:
                     payment();
@@ -112,16 +122,16 @@ public class ProfileController {
     /**
      * Transaction
      */
-    private void transactionList() {
-        Profile profile = ComponentContainer.currentProfile;
-        ComponentContainer.transactionService.transactionList(profile);
-    }
+//    private void transactionList() {
+//        Profile profile = ComponentContainer.currentProfile;
+//        transactionService.transactionList(profile);
+//    }
 
     private void payment() {
         System.out.print("Enter cardNumber: ");
         String number = ComponentContainer.scannerText.next();
         System.out.print("Enter terminal number: ");
         String code = ComponentContainer.scannerText.next();
-        ComponentContainer.transactionService.makePayment(number, code);
+       transactionService.makePayment(number, code);
     }
 }

@@ -8,9 +8,10 @@ import org.example.repository.ProfileRepository;
 import java.util.List;
 
 public class ProfileService {
-
-    private ProfileRepository profileRepository = new ProfileRepository();
-    private CardService cardService = ComponentContainer.cardService;
+    private ProfileRepository profileRepository;
+    public void setProfileRepository(ProfileRepository profileRepository) {
+        this.profileRepository = profileRepository;
+    }
 
     public void profileList() {
         List<Profile> profileList = profileRepository.getProfileList();

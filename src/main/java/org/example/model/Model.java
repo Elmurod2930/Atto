@@ -9,7 +9,6 @@ public class Model {
     private Terminal terminal;
     private Card card;
 
-
     public Model(Transaction transaction, Terminal terminal, Card card) {
         this.transaction = transaction;
         this.terminal = terminal;

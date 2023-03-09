@@ -7,6 +7,13 @@ import org.example.util.ScannerUtil;
 import java.util.Scanner;
 
 public class AuthController {
+    private AuthService authService;
+
+    public void setAuthService(AuthService authService) {
+        this.authService = authService;
+    }
+
+
 
     public void start() {
         boolean game = true;
@@ -27,6 +34,7 @@ public class AuthController {
             }
         }
     }
+
     public void menu() {
         System.out.println("********************Menu***********************");
         System.out.println("1. Login > ");
@@ -43,8 +51,7 @@ public class AuthController {
         System.out.print("Enter pswd:");
         String password = scanner.next();
 
-        AuthService profileService = new AuthService();
-        profileService.login(phone, password);
+        authService.login(phone, password);
     }
 
     private void registration() {
@@ -69,7 +76,6 @@ public class AuthController {
         profile.setPassword(password);
 
 
-        AuthService authService = new AuthService();
         authService.registration(profile);
     }
 

@@ -14,6 +14,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TransactionRepository {
+    private TerminalRepository terminalRepository;
+    private CardRepository cardRepository;
+
+    public void setCardRepository(CardRepository cardRepository) {
+        this.cardRepository = cardRepository;
+    }
+
+    public void setTerminalRepository(TerminalRepository terminalRepository) {
+        this.terminalRepository = terminalRepository;
+    }
 
     public int createTransaction(Transaction transaction) {
         try (Connection connection = DataBase.getConnection()) {
@@ -182,7 +192,7 @@ public class TransactionRepository {
     public void makePayment(Card card, Integer terminalId) {
         try {
             Connection connection = DataBase.getConnection();
-            ComponentContainer.cardRepository.rechargeBalance(card.getId(), card.getBalance() - 1400.0);
+            cardRepository.rechargeBalance(card.getId(), card.getBalance() - 1400.0);
             PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction(card_id,amount,terminal_id,type,created_date) value(?,?,?,?,now())");
             preparedStatement.setString(1, card.getCardNumber());
             preparedStatement.setDouble(2, 1400.0);
@@ -195,28 +205,28 @@ public class TransactionRepository {
         }
     }
 
-    public List<Model> transactionList(Card card) {
-        List<Model> transactionList = new LinkedList<>();
-        try {
-            Connection connection = DataBase.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from transaction where card_id=?");
-            preparedStatement.setInt(1, card.getId());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                Transaction transaction = new Transaction();
-                transaction.setId(resultSet.getInt("id"));
-                transaction.setCardId(resultSet.getInt("card_id"));
-                transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("type")));
-                transaction.setAmount(Double.valueOf(resultSet.getString("amount")));
-                transaction.setTerminalId(resultSet.getInt("terminal_id"));
-                transaction.setCreatedDate(resultSet.getTimestamp("created_date").toLocalDateTime());
-                Terminal terminal = ComponentContainer.terminalRepository.getTerminalById(transaction.getTerminalId());
-                Model model = new Model(transaction, terminal, card);
-                transactionList.add(model);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return transactionList;
-    }
+//    public List<Model> transactionList(Card card) {
+//        List<Model> transactionList = new LinkedList<>();
+//        try {
+//            Connection connection = DataBase.getConnection();
+//            PreparedStatement preparedStatement = connection.prepareStatement("select * from transaction where card_id=?");
+//            preparedStatement.setInt(1, card.getId());
+//            ResultSet resultSet = preparedStatement.executeQuery();
+//            while (resultSet.next()) {
+//                Transaction transaction = new Transaction();
+//                transaction.setId(resultSet.getInt("id"));
+//                transaction.setCardId(resultSet.getInt("card_id"));
+//                transaction.setTransactionType(TransactionType.valueOf(resultSet.getString("type")));
+//                transaction.setAmount(Double.valueOf(resultSet.getString("amount")));
+//                transaction.setTerminalId(resultSet.getInt("terminal_id"));
+//                transaction.setCreatedDate(resultSet.getTimestamp("created_date").toLocalDateTime());
+//                Terminal terminal =terminalRepository.getTerminalById(transaction.getTerminalId());
+//                Model model = new Model(transaction, terminal, card);
+//                transactionList.add(model);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return transactionList;
+//    }
 }

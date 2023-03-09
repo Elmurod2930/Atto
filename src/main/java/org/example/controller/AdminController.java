@@ -11,9 +11,21 @@ import org.example.util.ScannerUtil;
 import java.util.Scanner;
 
 public class AdminController {
-    private CardService cardService = new CardService();
-    private ProfileService profileService = new ProfileService();
-    private TerminalService terminalService = new TerminalService();
+    private CardService cardService;
+    private ProfileService profileService;
+    private TerminalService terminalService;
+
+    public void setCardService(CardService cardService) {
+        this.cardService = cardService;
+    }
+
+    public void setProfileService(ProfileService profileService) {
+        this.profileService = profileService;
+    }
+
+    public void setTerminalService(TerminalService terminalService) {
+        this.terminalService = terminalService;
+    }
 
     public void start() {
         boolean b = true;
